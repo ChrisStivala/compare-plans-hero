@@ -20,6 +20,7 @@ a{color:#232323}
 button{font-family:inherit}
 .cp-link{text-decoration:underline dotted;text-decoration-color:#C4C4C4;text-decoration-thickness:1.4px;text-underline-offset:3px;cursor:pointer;transition:color .15s ease,text-decoration-color .15s ease}
 .cp-link:hover{color:#1A73E8 !important;text-decoration-color:#1A73E8}
+@media (hover:hover){.proof-nav{opacity:0;transition:opacity .2s ease}.proof-sec:hover .proof-nav,.proof-sec:focus-within .proof-nav{opacity:1}}
 @keyframes cpFade{from{opacity:0}to{opacity:1}}
 @keyframes cpFadeOut{from{opacity:1}to{opacity:0}}
 @keyframes cpDrop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
@@ -440,8 +441,8 @@ const PROOF_POINTS=[
 let _proofTimer=null,_proofIdx=0;
 function proofSectionHTML(lo){
   const w=lo.isWide;
-  const btn=(dir,d)=>`<button data-proof="${dir}" aria-label="${dir}" style="flex-shrink:0;width:${w?'40px':'34px'};height:${w?'40px':'34px'};border:0;background:#F1F1F1;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#232323"><svg width="${w?'20':'17'}" height="${w?'20':'17'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"></path></svg></button>`;
-  return `<div style="background:#fff;display:flex;justify-content:center;padding:${w?'34px 40px':'24px 16px'}">
+  const btn=(dir,d)=>`<button data-proof="${dir}" aria-label="${dir}" class="proof-nav" style="flex-shrink:0;width:${w?'40px':'34px'};height:${w?'40px':'34px'};border:0;background:#F1F1F1;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#232323"><svg width="${w?'20':'17'}" height="${w?'20':'17'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"></path></svg></button>`;
+  return `<div class="proof-sec" style="background:#fff;display:flex;justify-content:center;padding:${w?'0 40px 32px':'24px 16px'}">
   <div style="width:100%;max-width:${lo.trackMax};display:flex;align-items:center;justify-content:space-between;gap:16px">
     ${btn('prev','M15 5 L8 12 L15 19')}
     <div id="proof-content" style="flex:0 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:${w?'14px':'10px'};min-height:${w?'48px':'44px'};transition:opacity .26s ease"></div>
@@ -520,14 +521,14 @@ function buildShell(){
   </div>
   <div style="padding:0 16px">
     <div style="border-radius:32px;background:#FFF0D6;overflow:hidden;display:flex;flex-direction:column">
-      <div style="padding:28px 24px 0;display:flex;justify-content:flex-start">
-        <div style="position:relative;width:210px;height:172px">
-          <div style="position:absolute;left:18px;top:138px;width:168px;height:22px;border-radius:50%;background:rgba(102,65,0,.20);filter:blur(2px)"></div>
-          <img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="position:absolute;left:0;top:-12px;width:210px;height:210px;object-fit:contain">
+      <div style="padding:24px 28px 0;display:flex;justify-content:flex-start">
+        <div style="position:relative;width:186px;height:152px">
+          <div style="position:absolute;left:16px;top:122px;width:149px;height:19px;border-radius:50%;background:rgba(102,65,0,.20);filter:blur(2px)"></div>
+          <img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="position:absolute;left:0;top:-11px;width:186px;height:186px;object-fit:contain">
         </div>
       </div>
-      <div style="padding:20px 24px 24px;display:flex;flex-direction:column;gap:20px">
-        <span style="font-weight:700;font-size:24px;line-height:28px;color:#232323">Switch or move with Origin Go Variable</span>
+      <div style="padding:16px 28px 22px;display:flex;flex-direction:column;gap:16px">
+        <span style="font-weight:700;font-size:22px;line-height:27px;color:#232323">Switch or move with Origin Go Variable</span>
         <span style="font-weight:400;font-size:14px;line-height:24px;color:#232323">Get up to $200 (inc. GST) in bill credits — $100 each for electricity and natural gas. Sign up online and stay until 30 June 2026.</span>
         <span style="font-weight:400;font-size:14px;line-height:24px;color:#232323">New or moving residents in NSW, SA or VIC only. Not available if you've had a credit for the same fuel and address in the last 12 months.</span>
       </div>
@@ -548,12 +549,12 @@ function buildShell(){
       <span style="font-weight:500;font-size:${lo.isTablet?'20px':'24px'};line-height:${lo.isTablet?'28px':'32px'};color:#232323">Electricity &amp; Natural Gas plans</span>
     </div>
   </div>
-  <div style="width:100%;box-sizing:border-box;padding:16px 40px 48px">
-    <div style="border-radius:32px;background:#FFF0D6;width:100%;box-sizing:border-box;padding:clamp(40px,4.5vw,80px) clamp(24px,3vw,48px)">
-      <div style="width:100%;max-width:${lo.trackMax};margin:0 auto;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:32px 48px">
-        <div style="flex:1 1 560px;min-width:min(440px,100%);display:flex;flex-direction:column;gap:${lo.isTablet?'20px':'32px'};max-width:760px">
-          ${lo.isTablet?'<img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="width:200px;height:auto;display:block">':''}
-          <h1 style="margin:0;font-weight:700;font-size:${lo.isTablet?'32px':'42px'};line-height:1.08;color:#232323;letter-spacing:-.015em;text-wrap:balance">Switch or move with Origin Go Variable</h1>
+  <div style="width:100%;box-sizing:border-box;padding:16px 40px 32px">
+    <div style="border-radius:32px;background:#FFF0D6;width:100%;box-sizing:border-box;padding:clamp(28px,3vw,52px) clamp(36px,4.5vw,80px)">
+      <div style="width:100%;max-width:${lo.trackMax};margin:0 auto;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px 48px">
+        <div style="flex:1 1 520px;min-width:min(420px,100%);display:flex;flex-direction:column;gap:${lo.isTablet?'18px':'26px'};max-width:720px">
+          ${lo.isTablet?'<img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="width:184px;height:auto;display:block">':''}
+          <h1 style="margin:0;font-weight:700;font-size:${lo.isTablet?'30px':'38px'};line-height:1.08;color:#232323;letter-spacing:-.015em;text-wrap:balance">Switch or move with Origin Go Variable</h1>
           <span style="font-weight:400;font-size:${lo.isTablet?'15px':'16px'};line-height:${lo.isTablet?'24px':'26px'};color:#232323;max-width:560px">Get up to $200 (inc. GST) in bill credits — $100 each for electricity and natural gas. Sign up online and stay until 30 June 2026.</span>
           <span style="font-weight:400;font-size:${lo.isTablet?'12px':'13px'};line-height:21px;color:#737373;max-width:560px">New or moving residents in NSW, SA or VIC only. Not available if you've had a credit for the same fuel and address in the last 12 months.</span>
           <div style="position:relative;width:100%;max-width:560px;margin-top:4px">
@@ -567,8 +568,8 @@ function buildShell(){
             <div id="sdrop-w" style="display:none;flex-direction:column;position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:30;background:#fff;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.14);overflow:hidden;animation:cpDrop .2s ease"></div>
           </div>
         </div>
-        <div id="hero-img-wrap" style="flex:0 0 auto;min-width:min(280px,100%);display:${lo.isTablet?'none':'flex'};flex-direction:column;justify-content:center;align-items:center;gap:0">
-          <img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="width:100%;max-width:420px;height:auto;display:block">
+        <div id="hero-img-wrap" style="flex:0 0 auto;min-width:min(260px,100%);display:${lo.isTablet?'none':'flex'};flex-direction:column;justify-content:center;align-items:center;gap:0">
+          <img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="width:100%;max-width:380px;height:auto;display:block">
         </div>
       </div>
     </div>
