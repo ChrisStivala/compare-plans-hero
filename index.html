@@ -438,19 +438,19 @@ const PROOF_POINTS=[
   {icon:PICO('<circle cx="12" cy="9" r="5.2"></circle><path d="M8.5 13.2 L7 21 L12 18.3 L17 21 L15.5 13.2"></path><path d="M12 6.6l.9 1.8 2 .3-1.45 1.4.34 2-1.79-.94-1.79.94.34-2L9.1 8.7l2-.3z" fill="currentColor" stroke="none"></path>'),title:'Award-winning value',sub:'Recognised for customer satisfaction'}
 ];
 let _proofTimer=null,_proofIdx=0;
-function proofRotatorHTML(sfx,wide){
-  const btn=(dir,d)=>`<button data-proof="${dir}" aria-label="${dir}" style="flex-shrink:0;width:${wide?'40px':'34px'};height:${wide?'40px':'34px'};border:0;background:transparent;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#232323"><svg width="${wide?'22':'18'}" height="${wide?'22':'18'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"></path></svg></button>`;
-  return `<div id="proof-rot-${sfx}" style="width:100%;max-width:${wide?'640px':'100%'};margin:0 auto;display:flex;align-items:center;gap:${wide?'12px':'4px'}">
+function proofBarHTML(sfx,wide,show){
+  const btn=(dir,d)=>`<button data-proof="${dir}" aria-label="${dir}" style="flex-shrink:0;width:${wide?'32px':'28px'};height:${wide?'32px':'28px'};border:0;background:rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff"><svg width="${wide?'16':'15'}" height="${wide?'16':'15'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"></path></svg></button>`;
+  return `<div style="display:${show?'flex':'none'};background:#FF6024;align-items:center;justify-content:center;gap:${wide?'24px':'8px'};padding:${wide?'7px 24px':'8px 10px'}">
   ${btn('prev','M15 5 L8 12 L15 19')}
-  <div id="proof-content-${sfx}" style="flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:${wide?'16px':'12px'};min-height:${wide?'58px':'54px'};transition:opacity .26s ease"></div>
+  <div id="proof-content-${sfx}" style="flex:0 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:${wide?'12px':'10px'};min-height:40px;transition:opacity .26s ease"></div>
   ${btn('next','M9 5 L16 12 L9 19')}
 </div>`;
 }
 function proofItemHTML(p,wide){
-  return `<div style="flex-shrink:0;width:${wide?'40px':'34px'};height:${wide?'40px':'34px'};color:#232323;display:flex;align-items:center;justify-content:center">${p.icon}</div>
-  <div style="display:flex;flex-direction:column;gap:1px;text-align:left;min-width:0">
-    <span style="font-weight:700;font-size:${wide?'19px':'16px'};line-height:${wide?'25px':'21px'};color:#232323">${p.title}</span>
-    <span style="font-weight:400;font-size:${wide?'14px':'13px'};line-height:${wide?'20px':'18px'};color:#737373">${p.sub}</span>
+  return `<div style="flex-shrink:0;width:${wide?'26px':'24px'};height:${wide?'26px':'24px'};color:#fff;display:flex;align-items:center;justify-content:center">${p.icon}</div>
+  <div style="display:flex;${wide?'flex-direction:row;align-items:baseline;gap:8px':'flex-direction:column;gap:0'};min-width:0;text-align:left">
+    <span style="font-weight:700;font-size:${wide?'15.5px':'13.5px'};line-height:${wide?'22px':'17px'};color:#fff;${wide?'white-space:nowrap':''}">${p.title}</span>
+    <span style="font-weight:400;font-size:${wide?'14px':'12px'};line-height:${wide?'22px':'16px'};color:rgba(255,255,255,.9)">${p.sub}</span>
   </div>`;
 }
 function renderProof(){['m','w'].forEach(sfx=>{const el=document.getElementById('proof-content-'+sfx);if(el)el.innerHTML=proofItemHTML(PROOF_POINTS[_proofIdx],sfx==='w');});}
@@ -470,7 +470,7 @@ function startProofRotator(){
 /* ── Main render ────────────────────────────────────────────── */
 function buildShell(){
   const lo=L();
-  const searchBarMob=`<div style="border-radius:24px;background:#fff;border:2px solid #232323;box-shadow:0 10px 26px rgba(0,0,0,.10);padding:14px;display:flex;flex-direction:column;gap:16px">
+  const searchBarMob=`<div style="border-radius:24px;background:#fff;border:1px solid #EAEAEA;box-shadow:0 8px 24px rgba(0,0,0,.07);padding:14px;display:flex;flex-direction:column;gap:16px">
   <div id="search-row-m" style="display:flex;align-items:center;gap:8px;padding:8px 0;cursor:text;min-width:0">
     <div style="width:24px;height:24px;flex-shrink:0;color:#505050;display:flex;align-items:center;justify-content:center"><cp-icon name="SearchSolid" size="24"></cp-icon></div>
     <input id="sinput-m" class="cp-input" placeholder="Find plans for your home..." autocomplete="off" style="flex-grow:1;min-width:0;border:0;outline:none;background:transparent;font-family:gordita;font-weight:700;font-size:16px;line-height:24px;color:#232323;padding:0;caret-color:#505050">
@@ -533,10 +533,11 @@ function buildShell(){
   </div>
 </div>
 
+<!-- Rotating proof bar — mobile -->
+${proofBarHTML('m',false,!lo.isWide)}
+
 <!-- Decoupled search — mobile -->
-<div id="search-section-m" style="display:${lo.isWide?'none':'block'};background:#fff;padding:20px 16px 4px">
-  ${proofRotatorHTML('m',false)}
-  <div style="height:1px;background:#ECECEC;margin:18px 4px 20px"></div>
+<div id="search-section-m" style="display:${lo.isWide?'none':'block'};background:#fff;padding:28px 16px 4px">
   <div style="display:flex;flex-direction:column;gap:6px;text-align:center;margin-bottom:16px">
     <span style="font-weight:700;font-size:22px;line-height:28px;color:#232323">See plans for your home</span>
     <span style="font-weight:400;font-size:14px;line-height:22px;color:#505050">Enter your address to see the plans you can sign up to today.</span>
@@ -581,15 +582,16 @@ function buildShell(){
   </div>
 </div>
 
+<!-- Rotating proof bar — wide -->
+${proofBarHTML('w',true,lo.isWide)}
+
 <!-- Decoupled search — wide -->
 <div id="search-section-w" style="display:${lo.isWide?'flex':'none'};background:#fff;justify-content:center;padding:44px 40px 52px">
   <div style="width:100%;max-width:${lo.trackMax};display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center">
-    ${proofRotatorHTML('w',true)}
-    <div style="width:100%;max-width:640px;height:1px;background:#ECECEC;margin:4px 0 8px"></div>
     <span style="font-weight:700;font-size:${lo.isTablet?'26px':'32px'};line-height:1.12;color:#232323;letter-spacing:-.01em;text-wrap:balance">See plans available for your home</span>
     <span style="font-weight:400;font-size:16px;line-height:26px;color:#505050;max-width:520px">Enter your address and we'll show you the Origin plans you can sign up to today.</span>
     <div style="position:relative;width:100%;max-width:600px;margin-top:8px">
-      <div id="search-row-w" style="display:flex;align-items:center;gap:12px;background:#fff;border:2px solid #232323;border-radius:40px;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:8px 8px 8px 24px;cursor:text;min-width:0">
+      <div id="search-row-w" style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #EAEAEA;border-radius:40px;box-shadow:0 8px 28px rgba(0,0,0,.09);padding:8px 8px 8px 24px;cursor:text;min-width:0">
         <div style="width:24px;height:24px;flex-shrink:0;color:#505050;display:flex;align-items:center;justify-content:center"><cp-icon name="SearchSolid" size="24"></cp-icon></div>
         <input id="sinput-w" class="cp-input" placeholder="Find plans for your home..." autocomplete="off" style="flex-grow:1;min-width:0;border:0;outline:none;background:transparent;font-family:gordita;font-weight:700;font-size:17px;line-height:26px;color:#232323;padding:0;caret-color:#505050">
         <div id="sclear-w" style="display:none;width:30px;height:30px;flex-shrink:0;border-radius:50%;background:#505050;align-items:center;justify-content:center;cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M5 5 L19 19 M19 5 L5 19"></path></svg></div>
