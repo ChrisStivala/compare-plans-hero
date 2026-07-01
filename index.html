@@ -433,9 +433,9 @@ function suggestionsHTML(){
 /* ── Rotating proof points ──────────────────────────────────── */
 const PICO=(paths)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%">${paths}</svg>`;
 const PROOF_POINTS=[
-  {icon:PICO('<rect x="3" y="8" width="18" height="4" rx="1"></rect><path d="M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"></path><path d="M12 8v13"></path><path d="M12 8C11 8 8.5 7.6 8.5 5.75 8.5 4.5 9.5 4 10.2 4.3 11.4 4.8 12 8 12 8z"></path><path d="M12 8c1 0 3.5-.4 3.5-2.25C15.5 4.5 14.5 4 13.8 4.3 12.6 4.8 12 8 12 8z"></path>'),title:'Up to $200 in bill credits',sub:'$100 each for electricity &amp; natural gas'},
-  {icon:PICO('<rect x="4.5" y="10.5" width="15" height="10" rx="2"></rect><path d="M8 10.5V7a4 4 0 0 1 7.7-1.5"></path><circle cx="12" cy="15" r="1.4"></circle>'),title:'No lock-in contract or exit fees',sub:'Change or cancel your plan anytime'},
-  {icon:PICO('<circle cx="12" cy="9" r="5.2"></circle><path d="M8.5 13.2 L7 21 L12 18.3 L17 21 L15.5 13.2"></path><path d="M12 6.6l.9 1.8 2 .3-1.45 1.4.34 2-1.79-.94-1.79.94.34-2L9.1 8.7l2-.3z" fill="currentColor" stroke="none"></path>'),title:'Award-winning value',sub:'Recognised for customer satisfaction'}
+  {icon:PICO('<path d="M13 2 L4 14 h7 l-1 8 9-12 h-7 z"></path>'),title:'Easy signup',sub:'No credit card required'},
+  {icon:PICO('<rect x="1.5" y="6.5" width="13" height="9.5" rx="1"></rect><path d="M14.5 9.5h3.6l3 3V16h-6.6z"></path><circle cx="6" cy="18" r="1.9"></circle><circle cx="17.5" cy="18" r="1.9"></circle>'),title:'Next day move guarantee',sub:'Set up for your move-in day'},
+  {icon:PICO('<rect x="4.5" y="10.5" width="15" height="10" rx="2"></rect><path d="M8 10.5V7a4 4 0 0 1 7.7-1.5"></path><circle cx="12" cy="15" r="1.4"></circle>'),title:'No lock-in contracts or exit fees',sub:'Change or cancel anytime'}
 ];
 let _proofTimer=null,_proofIdx=0;
 function proofBarHTML(sfx,wide,show){
@@ -508,27 +508,19 @@ function buildShell(){
 <!-- Hero mobile -->
 <div id="hero-m" style="display:${lo.isWide?'none':'block'}">
   <div style="background:#FFF0D6;overflow:hidden;display:flex;flex-direction:column">
-    <div style="padding:24px 24px 0;display:flex;flex-direction:column;gap:8px">
-      <div style="display:flex;align-items:center;gap:4px;color:#505050">
-        <div style="width:12px;height:12px;display:flex;align-items:center;justify-content:center"><cp-icon name="ChevronLeftSmallSolid" size="12"></cp-icon></div>
-        <span style="font-weight:500;font-size:12px;color:#505050">Energy</span>
-      </div>
-      <span style="font-weight:500;font-size:20px;line-height:28px;color:#232323">Electricity &amp; Natural Gas plans</span>
-    </div>
-    <div style="padding:16px 24px 0;display:flex;justify-content:center">
-      <div style="position:relative;width:210px;height:172px">
-        <div style="position:absolute;left:18px;top:138px;width:168px;height:22px;border-radius:50%;background:rgba(102,65,0,.20);filter:blur(2px)"></div>
-        <img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="position:absolute;left:0;top:-12px;width:210px;height:210px;object-fit:contain">
+    <div style="padding:18px 24px 0;display:flex;justify-content:center">
+      <div style="position:relative;width:150px;height:124px">
+        <div style="position:absolute;left:13px;top:99px;width:120px;height:16px;border-radius:50%;background:rgba(102,65,0,.20);filter:blur(2px)"></div>
+        <img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="position:absolute;left:0;top:-9px;width:150px;height:150px;object-fit:contain">
       </div>
     </div>
-    <div style="padding:20px 24px 32px;display:flex;flex-direction:column;gap:20px">
-      <span style="font-weight:700;font-size:26px;line-height:30px;color:#232323">Switch or move with Origin Go Variable</span>
-      <span style="font-weight:400;font-size:14px;line-height:24px;color:#232323">Get up to $200 (inc. GST) in bill credits — $100 each for electricity and natural gas. Sign up online and stay until 30 June 2026.</span>
-      <span style="font-weight:400;font-size:14px;line-height:24px;color:#232323">New or moving residents in NSW, SA or VIC only. Not available if you've had a credit for the same fuel and address in the last 12 months.</span>
-      <div style="display:flex;align-items:center;gap:6px">
-        <div style="width:20px;height:20px;color:#232323;display:flex;align-items:center;justify-content:center"><cp-icon name="VerifiedUserSolid" size="20"></cp-icon></div>
-        <span style="font-weight:500;font-size:12px;line-height:20px;color:#000">No lock-in contract, no exit fees.</span>
+    <div style="padding:10px 24px 24px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-weight:600;font-size:13px;line-height:18px;letter-spacing:.03em;color:#C4471C">Electricity &amp; Natural Gas plans</span>
+        <span style="font-weight:700;font-size:25px;line-height:29px;color:#232323">Switch or move with Origin Go Variable</span>
       </div>
+      <span style="font-weight:400;font-size:14px;line-height:23px;color:#232323">Get up to $200 (inc. GST) in bill credits — $100 each for electricity and natural gas. Sign up online and stay until 30 June 2026.</span>
+      <span style="font-weight:400;font-size:12.5px;line-height:20px;color:#8A7A58">New or moving residents in NSW, SA or VIC only. Not available if you've had a credit for the same fuel and address in the last 12 months.</span>
     </div>
   </div>
 </div>
@@ -548,34 +540,19 @@ ${proofBarHTML('m',false,!lo.isWide)}
 <!-- Hero wide -->
 <div id="hero-w" style="display:${lo.isWide?'flex':'none'};background:#fff;flex-direction:column;align-items:center">
   <div style="width:100%;box-sizing:border-box;padding:0">
-    <div style="background:#FFF0D6;width:100%;box-sizing:border-box;padding:clamp(32px,3.5vw,56px) 40px clamp(48px,5vw,88px)">
-      <div style="width:100%;max-width:${lo.trackMax};margin:0 auto;box-sizing:border-box;display:flex;flex-direction:column;gap:clamp(28px,3vw,44px)">
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div style="display:flex;align-items:center;gap:8px;color:#8a7a58;font-weight:500;font-size:13px">
-            <span style="text-decoration:underline;cursor:pointer">Home</span><span style="color:#C4B48F">›</span>
-            <span style="text-decoration:underline;cursor:pointer">Energy</span><span style="color:#C4B48F">›</span>
-            <span>Plans</span>
+    <div style="background:#FFF0D6;width:100%;box-sizing:border-box;padding:clamp(28px,3vw,48px) 40px">
+      <div style="width:100%;max-width:${lo.trackMax};margin:0 auto;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:28px 48px">
+        <div style="flex:1 1 520px;min-width:min(440px,100%);display:flex;flex-direction:column;gap:${lo.isTablet?'14px':'18px'};max-width:720px">
+          ${lo.isTablet?'<img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="width:168px;height:auto;display:block">':''}
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-weight:600;font-size:15px;line-height:20px;letter-spacing:.03em;color:#C4471C">Electricity &amp; Natural Gas plans</span>
+            <h1 style="margin:0;font-weight:700;font-size:${lo.isTablet?'30px':'38px'};line-height:1.08;color:#232323;letter-spacing:-.015em;text-wrap:balance">Switch or move with Origin Go Variable</h1>
           </div>
-          <span style="font-weight:500;font-size:${lo.isTablet?'20px':'24px'};line-height:${lo.isTablet?'28px':'32px'};color:#232323">Electricity &amp; Natural Gas plans</span>
-        </div>
-        <div style="width:100%;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:32px 48px">
-        <div style="flex:1 1 560px;min-width:min(440px,100%);display:flex;flex-direction:column;gap:${lo.isTablet?'20px':'32px'};max-width:760px">
-          ${lo.isTablet?'<img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="width:200px;height:auto;display:block">':''}
-          <h1 style="margin:0;font-weight:700;font-size:${lo.isTablet?'32px':'42px'};line-height:1.08;color:#232323;letter-spacing:-.015em;text-wrap:balance">Switch or move with Origin Go Variable</h1>
           <span style="font-weight:400;font-size:${lo.isTablet?'15px':'16px'};line-height:${lo.isTablet?'24px':'26px'};color:#232323;max-width:560px">Get up to $200 (inc. GST) in bill credits — $100 each for electricity and natural gas. Sign up online and stay until 30 June 2026.</span>
-          <span style="font-weight:400;font-size:${lo.isTablet?'12px':'13px'};line-height:21px;color:#737373;max-width:560px">New or moving residents in NSW, SA or VIC only. Not available if you've had a credit for the same fuel and address in the last 12 months.</span>
-          <div id="proof-top" style="display:${lo.isTablet?'flex':'none'};align-items:center;gap:8px;margin-top:4px">
-            <div style="width:22px;height:22px;color:#232323;display:flex;align-items:center;justify-content:center"><cp-icon name="VerifiedUserSolid" size="22"></cp-icon></div>
-            <span style="font-weight:500;font-size:13px;line-height:20px;color:#000">No lock-in contract, no exit fees.</span>
-          </div>
+          <span style="font-weight:400;font-size:${lo.isTablet?'12px':'13px'};line-height:21px;color:#8A7A58;max-width:560px">New or moving residents in NSW, SA or VIC only. Not available if you've had a credit for the same fuel and address in the last 12 months.</span>
         </div>
-        <div id="hero-img-wrap" style="flex:0 0 auto;min-width:min(280px,100%);display:${lo.isTablet?'none':'flex'};flex-direction:column;justify-content:center;align-items:center;gap:0">
-          <img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="width:100%;max-width:420px;height:auto;display:block">
-          <div id="proof-img" style="display:flex;align-items:center;gap:8px;margin-top:-20px">
-            <div style="width:22px;height:22px;color:#232323;display:flex;align-items:center;justify-content:center"><cp-icon name="VerifiedUserSolid" size="22"></cp-icon></div>
-            <span style="font-weight:500;font-size:13px;line-height:20px;color:#000">No lock-in contract, no exit fees.</span>
-          </div>
-        </div>
+        <div id="hero-img-wrap" style="flex:0 0 auto;min-width:min(260px,100%);display:${lo.isTablet?'none':'flex'};justify-content:center;align-items:center">
+          <img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="width:100%;max-width:360px;height:auto;display:block">
         </div>
       </div>
     </div>
