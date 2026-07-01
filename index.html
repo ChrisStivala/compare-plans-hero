@@ -440,7 +440,7 @@ const PROOF_POINTS=[
 let _proofTimer=null,_proofIdx=0;
 function proofBarHTML(sfx,wide,show){
   const btn=(dir,d)=>`<button data-proof="${dir}" aria-label="${dir}" style="flex-shrink:0;width:${wide?'32px':'28px'};height:${wide?'32px':'28px'};border:0;background:rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff"><svg width="${wide?'16':'15'}" height="${wide?'16':'15'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"></path></svg></button>`;
-  return `<div style="display:${show?'flex':'none'};background:#FF6024;align-items:center;justify-content:center;gap:${wide?'24px':'8px'};padding:${wide?'7px 24px':'8px 10px'}">
+  return `<div style="display:${show?'flex':'none'};background:#FF6024;align-items:center;justify-content:space-between;gap:${wide?'24px':'8px'};padding:${wide?'7px 28px':'8px 12px'}">
   ${btn('prev','M15 5 L8 12 L15 19')}
   <div id="proof-content-${sfx}" style="flex:0 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:${wide?'12px':'10px'};min-height:40px;transition:opacity .26s ease"></div>
   ${btn('next','M9 5 L16 12 L9 19')}
