@@ -430,10 +430,47 @@ function suggestionsHTML(){
 </div>`).join('');
 }
 
+/* ── Rotating proof points ──────────────────────────────────── */
+const PICO=(paths)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%">${paths}</svg>`;
+const PROOF_POINTS=[
+  {icon:PICO('<rect x="3" y="8" width="18" height="4" rx="1"></rect><path d="M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"></path><path d="M12 8v13"></path><path d="M12 8C11 8 8.5 7.6 8.5 5.75 8.5 4.5 9.5 4 10.2 4.3 11.4 4.8 12 8 12 8z"></path><path d="M12 8c1 0 3.5-.4 3.5-2.25C15.5 4.5 14.5 4 13.8 4.3 12.6 4.8 12 8 12 8z"></path>'),title:'Up to $200 in bill credits',sub:'$100 each for electricity &amp; natural gas'},
+  {icon:PICO('<rect x="4.5" y="10.5" width="15" height="10" rx="2"></rect><path d="M8 10.5V7a4 4 0 0 1 7.7-1.5"></path><circle cx="12" cy="15" r="1.4"></circle>'),title:'No lock-in contract or exit fees',sub:'Change or cancel your plan anytime'},
+  {icon:PICO('<circle cx="12" cy="9" r="5.2"></circle><path d="M8.5 13.2 L7 21 L12 18.3 L17 21 L15.5 13.2"></path><path d="M12 6.6l.9 1.8 2 .3-1.45 1.4.34 2-1.79-.94-1.79.94.34-2L9.1 8.7l2-.3z" fill="currentColor" stroke="none"></path>'),title:'Award-winning value',sub:'Recognised for customer satisfaction'}
+];
+let _proofTimer=null,_proofIdx=0;
+function proofRotatorHTML(sfx,wide){
+  const btn=(dir,d)=>`<button data-proof="${dir}" aria-label="${dir}" style="flex-shrink:0;width:${wide?'40px':'34px'};height:${wide?'40px':'34px'};border:0;background:transparent;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#232323"><svg width="${wide?'22':'18'}" height="${wide?'22':'18'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"></path></svg></button>`;
+  return `<div id="proof-rot-${sfx}" style="width:100%;max-width:${wide?'640px':'100%'};margin:0 auto;display:flex;align-items:center;gap:${wide?'12px':'4px'}">
+  ${btn('prev','M15 5 L8 12 L15 19')}
+  <div id="proof-content-${sfx}" style="flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:${wide?'16px':'12px'};min-height:${wide?'58px':'54px'};transition:opacity .26s ease"></div>
+  ${btn('next','M9 5 L16 12 L9 19')}
+</div>`;
+}
+function proofItemHTML(p,wide){
+  return `<div style="flex-shrink:0;width:${wide?'40px':'34px'};height:${wide?'40px':'34px'};color:#232323;display:flex;align-items:center;justify-content:center">${p.icon}</div>
+  <div style="display:flex;flex-direction:column;gap:1px;text-align:left;min-width:0">
+    <span style="font-weight:700;font-size:${wide?'19px':'16px'};line-height:${wide?'25px':'21px'};color:#232323">${p.title}</span>
+    <span style="font-weight:400;font-size:${wide?'14px':'13px'};line-height:${wide?'20px':'18px'};color:#737373">${p.sub}</span>
+  </div>`;
+}
+function renderProof(){['m','w'].forEach(sfx=>{const el=document.getElementById('proof-content-'+sfx);if(el)el.innerHTML=proofItemHTML(PROOF_POINTS[_proofIdx],sfx==='w');});}
+function setProof(i){
+  _proofIdx=(i+PROOF_POINTS.length)%PROOF_POINTS.length;
+  const els=['m','w'].map(s=>document.getElementById('proof-content-'+s)).filter(Boolean);
+  els.forEach(el=>el.style.opacity='0');
+  setTimeout(()=>{renderProof();els.forEach(el=>el.style.opacity='1');},260);
+}
+function armProofTimer(){if(_proofTimer)clearInterval(_proofTimer);_proofTimer=setInterval(()=>setProof(_proofIdx+1),4500);}
+function startProofRotator(){
+  if(!document.getElementById('proof-content-m')&&!document.getElementById('proof-content-w'))return;
+  renderProof();armProofTimer();
+  document.querySelectorAll('[data-proof]').forEach(b=>b.addEventListener('click',()=>{setProof(_proofIdx+(b.getAttribute('data-proof')==='next'?1:-1));armProofTimer();}));
+}
+
 /* ── Main render ────────────────────────────────────────────── */
 function buildShell(){
   const lo=L();
-  const searchBarMob=`<div style="border-radius:24px;background:#fff;box-shadow:0 0 16px rgba(0,0,0,.08);padding:16px;display:flex;flex-direction:column;gap:16px">
+  const searchBarMob=`<div style="border-radius:24px;background:#fff;border:2px solid #232323;box-shadow:0 10px 26px rgba(0,0,0,.10);padding:14px;display:flex;flex-direction:column;gap:16px">
   <div id="search-row-m" style="display:flex;align-items:center;gap:8px;padding:8px 0;cursor:text;min-width:0">
     <div style="width:24px;height:24px;flex-shrink:0;color:#505050;display:flex;align-items:center;justify-content:center"><cp-icon name="SearchSolid" size="24"></cp-icon></div>
     <input id="sinput-m" class="cp-input" placeholder="Find plans for your home..." autocomplete="off" style="flex-grow:1;min-width:0;border:0;outline:none;background:transparent;font-family:gordita;font-weight:700;font-size:16px;line-height:24px;color:#232323;padding:0;caret-color:#505050">
@@ -444,7 +481,7 @@ function buildShell(){
   <button id="sbtn-m" style="border:0;background:#FFB233;border-radius:24px;height:48px;font-weight:600;font-size:16px;color:#232323;cursor:pointer">Search</button>
 </div>`;
 
-  const html=`<div style="min-height:100vh;display:flex;justify-content:center;background:${lo.isWide?'#fff':'#dfe1e3'};padding:0">
+  const html=`<div style="min-height:100vh;display:flex;justify-content:center;background:${lo.isWide?'#fff':'#F7F7F7'};padding:0">
 <div style="width:100%;max-width:${lo.isMobile?'100%':'none'};background:#fff;min-height:100vh;position:relative;overflow:hidden">
 
 <!-- Header mobile -->
@@ -470,15 +507,15 @@ function buildShell(){
 
 <!-- Hero mobile -->
 <div id="hero-m" style="display:${lo.isWide?'none':'block'}">
-  <div style="padding:32px 16px 24px;display:flex;flex-direction:column;gap:8px">
-    <div style="display:flex;align-items:center;gap:4px;color:#505050">
-      <div style="width:12px;height:12px;display:flex;align-items:center;justify-content:center"><cp-icon name="ChevronLeftSmallSolid" size="12"></cp-icon></div>
-      <span style="font-weight:500;font-size:12px;color:#505050">Energy</span>
-    </div>
-    <span style="font-weight:500;font-size:20px;line-height:28px;color:#232323">Electricity &amp; Natural Gas plans</span>
-  </div>
   <div style="background:#FFF0D6;overflow:hidden;display:flex;flex-direction:column">
-    <div style="padding:28px 24px 0;display:flex;justify-content:center">
+    <div style="padding:24px 24px 0;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;gap:4px;color:#505050">
+        <div style="width:12px;height:12px;display:flex;align-items:center;justify-content:center"><cp-icon name="ChevronLeftSmallSolid" size="12"></cp-icon></div>
+        <span style="font-weight:500;font-size:12px;color:#505050">Energy</span>
+      </div>
+      <span style="font-weight:500;font-size:20px;line-height:28px;color:#232323">Electricity &amp; Natural Gas plans</span>
+    </div>
+    <div style="padding:16px 24px 0;display:flex;justify-content:center">
       <div style="position:relative;width:210px;height:172px">
         <div style="position:absolute;left:18px;top:138px;width:168px;height:22px;border-radius:50%;background:rgba(102,65,0,.20);filter:blur(2px)"></div>
         <img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="position:absolute;left:0;top:-12px;width:210px;height:210px;object-fit:contain">
@@ -497,7 +534,9 @@ function buildShell(){
 </div>
 
 <!-- Decoupled search — mobile -->
-<div id="search-section-m" style="display:${lo.isWide?'none':'block'};background:#fff;padding:28px 16px 4px">
+<div id="search-section-m" style="display:${lo.isWide?'none':'block'};background:#fff;padding:20px 16px 4px">
+  ${proofRotatorHTML('m',false)}
+  <div style="height:1px;background:#ECECEC;margin:18px 4px 20px"></div>
   <div style="display:flex;flex-direction:column;gap:6px;text-align:center;margin-bottom:16px">
     <span style="font-weight:700;font-size:22px;line-height:28px;color:#232323">See plans for your home</span>
     <span style="font-weight:400;font-size:14px;line-height:22px;color:#505050">Enter your address to see the plans you can sign up to today.</span>
@@ -507,19 +546,18 @@ function buildShell(){
 
 <!-- Hero wide -->
 <div id="hero-w" style="display:${lo.isWide?'flex':'none'};background:#fff;flex-direction:column;align-items:center">
-  <div style="width:100%;box-sizing:border-box;padding:32px 40px 0;display:flex;justify-content:center">
-    <div style="width:100%;max-width:${lo.trackMax};display:flex;flex-direction:column;gap:16px">
-      <div style="display:flex;align-items:center;gap:8px;color:#737373;font-weight:500;font-size:13px;padding-top:8px">
-        <span style="text-decoration:underline;cursor:pointer">Home</span><span style="color:#B5B5B5">›</span>
-        <span style="text-decoration:underline;cursor:pointer">Energy</span><span style="color:#B5B5B5">›</span>
-        <span>Plans</span>
-      </div>
-      <span style="font-weight:500;font-size:${lo.isTablet?'20px':'24px'};line-height:${lo.isTablet?'28px':'32px'};color:#232323">Electricity &amp; Natural Gas plans</span>
-    </div>
-  </div>
-  <div style="width:100%;box-sizing:border-box;padding:16px 0 0">
-    <div style="background:#FFF0D6;width:100%;box-sizing:border-box;padding:clamp(48px,5vw,88px) 40px">
-      <div style="width:100%;max-width:${lo.trackMax};margin:0 auto;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:32px 48px">
+  <div style="width:100%;box-sizing:border-box;padding:0">
+    <div style="background:#FFF0D6;width:100%;box-sizing:border-box;padding:clamp(32px,3.5vw,56px) 40px clamp(48px,5vw,88px)">
+      <div style="width:100%;max-width:${lo.trackMax};margin:0 auto;box-sizing:border-box;display:flex;flex-direction:column;gap:clamp(28px,3vw,44px)">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:8px;color:#8a7a58;font-weight:500;font-size:13px">
+            <span style="text-decoration:underline;cursor:pointer">Home</span><span style="color:#C4B48F">›</span>
+            <span style="text-decoration:underline;cursor:pointer">Energy</span><span style="color:#C4B48F">›</span>
+            <span>Plans</span>
+          </div>
+          <span style="font-weight:500;font-size:${lo.isTablet?'20px':'24px'};line-height:${lo.isTablet?'28px':'32px'};color:#232323">Electricity &amp; Natural Gas plans</span>
+        </div>
+        <div style="width:100%;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:32px 48px">
         <div style="flex:1 1 560px;min-width:min(440px,100%);display:flex;flex-direction:column;gap:${lo.isTablet?'20px':'32px'};max-width:760px">
           ${lo.isTablet?'<img src="project/assets/comfy-credits.png" alt="Comfy Credits" style="width:200px;height:auto;display:block">':''}
           <h1 style="margin:0;font-weight:700;font-size:${lo.isTablet?'32px':'42px'};line-height:1.08;color:#232323;letter-spacing:-.015em;text-wrap:balance">Switch or move with Origin Go Variable</h1>
@@ -537,6 +575,7 @@ function buildShell(){
             <span style="font-weight:500;font-size:13px;line-height:20px;color:#000">No lock-in contract, no exit fees.</span>
           </div>
         </div>
+        </div>
       </div>
     </div>
   </div>
@@ -545,10 +584,12 @@ function buildShell(){
 <!-- Decoupled search — wide -->
 <div id="search-section-w" style="display:${lo.isWide?'flex':'none'};background:#fff;justify-content:center;padding:44px 40px 52px">
   <div style="width:100%;max-width:${lo.trackMax};display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center">
+    ${proofRotatorHTML('w',true)}
+    <div style="width:100%;max-width:640px;height:1px;background:#ECECEC;margin:4px 0 8px"></div>
     <span style="font-weight:700;font-size:${lo.isTablet?'26px':'32px'};line-height:1.12;color:#232323;letter-spacing:-.01em;text-wrap:balance">See plans available for your home</span>
     <span style="font-weight:400;font-size:16px;line-height:26px;color:#505050;max-width:520px">Enter your address and we'll show you the Origin plans you can sign up to today.</span>
     <div style="position:relative;width:100%;max-width:600px;margin-top:8px">
-      <div id="search-row-w" style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:40px;box-shadow:0 4px 24px rgba(0,0,0,.10);padding:8px 8px 8px 24px;cursor:text;min-width:0">
+      <div id="search-row-w" style="display:flex;align-items:center;gap:12px;background:#fff;border:2px solid #232323;border-radius:40px;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:8px 8px 8px 24px;cursor:text;min-width:0">
         <div style="width:24px;height:24px;flex-shrink:0;color:#505050;display:flex;align-items:center;justify-content:center"><cp-icon name="SearchSolid" size="24"></cp-icon></div>
         <input id="sinput-w" class="cp-input" placeholder="Find plans for your home..." autocomplete="off" style="flex-grow:1;min-width:0;border:0;outline:none;background:transparent;font-family:gordita;font-weight:700;font-size:17px;line-height:26px;color:#232323;padding:0;caret-color:#505050">
         <div id="sclear-w" style="display:none;width:30px;height:30px;flex-shrink:0;border-radius:50%;background:#505050;align-items:center;justify-content:center;cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M5 5 L19 19 M19 5 L5 19"></path></svg></div>
@@ -561,7 +602,7 @@ function buildShell(){
 </div>
 
 <!-- Results section -->
-<div data-results id="results-section" style="background:#F1F1F1;padding:${lo.isMobile?'32px 16px 120px':'28px 40px 140px'};margin-top:${lo.isWide?'0':'24px'};border-radius:${lo.isWide?'40px 40px 0 0':'24px 24px 0 0'};display:flex;justify-content:center">
+<div data-results id="results-section" style="background:#F7F7F7;padding:${lo.isMobile?'32px 16px 120px':'28px 40px 140px'};margin-top:${lo.isWide?'0':'24px'};border-radius:${lo.isWide?'40px 40px 0 0':'24px 24px 0 0'};display:flex;justify-content:center">
   <div style="width:100%;max-width:${lo.trackMax};display:flex;flex-direction:column;gap:${lo.isWide?'28px':'24px'}">
     <!-- Filter bar -->
     <div id="filter-wrap" style="${lo.isWide
@@ -631,6 +672,8 @@ function updateCarousel(){
   _car.style.cssText=`display:flex;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:${snap};outline:none;cursor:${lo.isWide?'grab':'auto'};gap:${cgap};padding:${pad};scroll-padding-left:${scrollPad};-webkit-mask-image:${mask};mask-image:${mask}`;
   _car.innerHTML=plans.map(p=>cardHTML(p,lo)).join('');
   _car.scrollLeft=saved;
+  // Centre the cards when they all fit (e.g. default 3-plan state); left-align + scroll when they overflow
+  requestAnimationFrame(()=>{if(_car)_car.style.justifyContent=(_car.scrollWidth<=_car.clientWidth+1)?'center':'flex-start';});
   updateCounts();
   updateArrows();
   updateRail();
@@ -1109,6 +1152,8 @@ function bindShellEvents(){
   document.getElementById('sclear-w')?.addEventListener('click',clearSearch);
   document.getElementById('sbtn-w')?.addEventListener('click',searchAction);
   document.getElementById('search-row-w')?.addEventListener('click',e=>{if(!e.target.closest('input')&&!e.target.closest('[id^=sclear]')&&!e.target.closest('[id^=scheck]')) searchAction();});
+  // Proof-point rotator
+  startProofRotator();
 }
 
 // Listeners on document/window, which persist across rebuilds. Bound once.
