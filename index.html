@@ -445,7 +445,7 @@ let _proofTimer=null,_proofIdx=0;
 function proofSectionHTML(lo){
   const w=lo.isWide;
   const btn=(dir,d)=>`<button data-proof="${dir}" aria-label="${dir}" class="proof-nav" style="flex-shrink:0;width:${w?'40px':'34px'};height:${w?'40px':'34px'};border:0;background:#F1F1F1;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#232323"><svg width="${w?'20':'17'}" height="${w?'20':'17'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"></path></svg></button>`;
-  return `<div class="proof-sec" style="background:#fff;display:flex;justify-content:center;padding:${w?'0 40px 32px':'24px 16px'}">
+  return `<div class="proof-sec" style="background:#fff;display:flex;justify-content:center;padding:${w?'12px 40px':'26px 16px'};border-bottom:1px solid rgba(0,0,0,.06)">
   <div style="width:100%;max-width:${lo.trackMax};display:flex;align-items:center;justify-content:space-between;gap:16px">
     ${btn('prev','M15 5 L8 12 L15 19')}
     <div id="proof-content" style="flex:0 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:${w?'14px':'10px'};min-height:${w?'48px':'44px'};transition:opacity .26s ease"></div>
@@ -535,6 +535,9 @@ function buildShell(){
   </div>
 </div>
 
+<!-- Rotating headline (directly under header, per ODS spec) -->
+${proofSectionHTML(lo)}
+
 <!-- Hero mobile -->
 <div id="hero-m" style="display:${lo.isWide?'none':'block'}">
   <div style="padding:32px 16px 24px;display:flex;flex-direction:column;gap:8px">
@@ -601,8 +604,6 @@ function buildShell(){
   </div>
 </div>
 
-<!-- Rotating headline (on white) -->
-${proofSectionHTML(lo)}
 
 <!-- Results section -->
 <div data-results id="results-section" style="background:#F1F1F1;padding:${lo.isMobile?'32px 16px 120px':'28px 40px 140px'};margin-top:${lo.isWide?'0':'24px'};border-radius:${lo.isWide?'40px 40px 0 0':'24px 24px 0 0'};display:flex;justify-content:center">
@@ -626,7 +627,7 @@ ${proofSectionHTML(lo)}
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 L17 7"></path><path d="M8 7 h9 v9"></path></svg>
         </a>
       </div>
-      <div id="results-bar" style="display:${lo.isWide?'flex':'none'};${(S.vw<1400)?'flex:1 1 100%':'flex:1 1 320px;min-width:280px'};align-items:center;justify-content:${(S.vw<1400)?'space-between':'flex-end'};gap:16px">
+      <div id="results-bar" style="display:${lo.isDesktop?'flex':'none'};${(S.vw<1400)?'flex:1 1 100%':'flex:1 1 320px;min-width:280px'};align-items:center;justify-content:${(S.vw<1400)?'space-between':'flex-end'};gap:16px">
         <span id="results-count" style="font-weight:400;font-size:15px;color:#505050;white-space:nowrap"></span>
         <div style="display:flex;gap:8px">
           <button id="btn-prev" aria-label="Previous" style="width:40px;height:40px;border-radius:50%;border:1px solid #D8D8D8;background:#fff;color:#232323;display:flex;align-items:center;justify-content:center;transition:opacity .2s,box-shadow .2s;cursor:pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5 L8 12 L15 19"></path></svg></button>
@@ -635,9 +636,9 @@ ${proofSectionHTML(lo)}
       </div>
     </div>
     <div id="pricing-note" style="display:none;text-align:center;font-weight:400;font-size:${lo.isWide?'15px':'14px'};line-height:22px;color:#232323"></div>
-    <span id="mobile-count" style="display:${lo.isMobile?'block':'none'};font-weight:400;font-size:14px;color:#505050"></span>
+    <span id="mobile-count" style="display:${lo.isDesktop?'none':'block'};font-weight:400;font-size:14px;color:#505050;text-align:${lo.isTablet?'center':'left'}"></span>
     ${lo.isWide?'<div style="height:2px;background:rgba(0,0,0,.10);border-radius:1px"></div>':''}
-    ${lo.isMobile?`<div id="swipe-hint" style="display:none;align-items:center;justify-content:center;gap:8px;color:#505050"><span style="font-weight:600;font-size:13px">Swipe to compare plans</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h4"></path><path d="M7.5 9.5 5 12l2.5 2.5"></path><path d="M19 12h-4"></path><path d="M16.5 9.5 19 12l-2.5 2.5"></path><circle cx="12" cy="12" r="2.4"></circle></svg></div>`:''}
+    ${!lo.isDesktop?`<div id="swipe-hint" style="display:none;align-items:center;justify-content:center;gap:8px;color:#505050"><span style="font-weight:600;font-size:13px">${lo.isTablet?'Swipe or drag to compare plans':'Swipe to compare plans'}</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h4"></path><path d="M7.5 9.5 5 12l2.5 2.5"></path><path d="M19 12h-4"></path><path d="M16.5 9.5 19 12l-2.5 2.5"></path><circle cx="12" cy="12" r="2.4"></circle></svg></div>`:''}
 
     <!-- Carousel -->
     <div style="position:relative;width:100vw;margin-left:calc(50% - 50vw)">
@@ -710,7 +711,7 @@ function updateCounts(){
     return;
   }
   if(note) note.style.display='none';
-  if(mc) mc.style.display=lo.isMobile?'block':'none';
+  if(mc) mc.style.display=lo.isDesktop?'none':'block';
   const active=['Solar','EV','Battery'].filter(k=>addons[k]);
   let lead,bold;
   if(fuel==='Gas'||active.length===0){lead=`Showing ${n} ${noun} for your home`;bold='';}
