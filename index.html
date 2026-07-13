@@ -23,7 +23,8 @@ button{font-family:inherit}
 #hdr-full{display:none}#hdr-compact{display:flex}
 @media(min-width:992px){#hdr-compact{display:none!important}#hdr-full{display:flex!important}}
 .hdr-nav a:hover{color:#FF6024!important}
-@media (hover:hover){.proof-nav{opacity:0;transition:opacity .2s ease}.proof-sec:hover .proof-nav,.proof-sec:focus-within .proof-nav{opacity:1}}
+.proof-nav{opacity:.6;transition:opacity .2s ease}
+@media (hover:hover){.proof-nav{opacity:0}.proof-sec:hover .proof-nav,.proof-sec:focus-within .proof-nav{opacity:.6}.proof-nav:hover{opacity:1}}
 @keyframes cpFade{from{opacity:0}to{opacity:1}}
 @keyframes cpFadeOut{from{opacity:1}to{opacity:0}}
 @keyframes cpDrop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
@@ -434,32 +435,26 @@ function suggestionsHTML(){
 </div>`).join('');
 }
 
-/* ── Rotating proof points ──────────────────────────────────── */
-const PICO=(paths)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%">${paths}</svg>`;
+/* ── Rotating headline (ODS spec: 14px/24px, Medium title + Regular sub,
+      plain 20px chevrons at 60% opacity, max-width 1140, 24px v-padding) ── */
 const PROOF_POINTS=[
-  {icon:PICO('<path d="M13 2 L4 14 h7 l-1 8 9-12 h-7 z"></path>'),title:'Easy signup',sub:'No credit card required'},
-  {icon:PICO('<rect x="1.5" y="6.5" width="13" height="9.5" rx="1"></rect><path d="M14.5 9.5h3.6l3 3V16h-6.6z"></path><circle cx="6" cy="18" r="1.9"></circle><circle cx="17.5" cy="18" r="1.9"></circle>'),title:'Next day move guarantee',sub:'Set up for your move-in day'},
-  {icon:PICO('<rect x="4.5" y="10.5" width="15" height="10" rx="2"></rect><path d="M8 10.5V7a4 4 0 0 1 7.7-1.5"></path><circle cx="12" cy="15" r="1.4"></circle>'),title:'No lock-in contracts or exit fees',sub:'Change or cancel anytime'}
+  {title:'Easy signup',sub:'No credit card required'},
+  {title:'Next day move guarantee',sub:'Set up for your move-in day'},
+  {title:'No lock-in contracts or exit fees',sub:'Change or cancel anytime'}
 ];
 let _proofTimer=null,_proofIdx=0;
 function proofSectionHTML(lo){
-  const w=lo.isWide;
-  const btn=(dir,d)=>`<button data-proof="${dir}" aria-label="${dir}" class="proof-nav" style="flex-shrink:0;width:${w?'40px':'34px'};height:${w?'40px':'34px'};border:0;background:#F1F1F1;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#232323"><svg width="${w?'20':'17'}" height="${w?'20':'17'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"></path></svg></button>`;
-  return `<div class="proof-sec" style="background:#fff;display:flex;justify-content:center;padding:${w?'12px 40px':'26px 16px'};border-bottom:1px solid rgba(0,0,0,.06)">
-  <div style="width:100%;max-width:${lo.trackMax};display:flex;align-items:center;justify-content:space-between;gap:16px">
+  const btn=(dir,d)=>`<button data-proof="${dir}" aria-label="${dir}" class="proof-nav" style="flex-shrink:0;width:36px;height:36px;margin:-8px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#232323"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"></path></svg></button>`;
+  return `<div class="proof-sec" style="background:#fff;display:flex;justify-content:center">
+  <div style="width:100%;max-width:1140px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 16px">
     ${btn('prev','M15 5 L8 12 L15 19')}
-    <div id="proof-content" style="flex:0 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:${w?'14px':'10px'};min-height:${w?'48px':'44px'};transition:opacity .26s ease"></div>
+    <div id="proof-content" style="flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;min-height:${lo.isMobile?'48px':'24px'};transition:opacity .26s ease"></div>
     ${btn('next','M9 5 L16 12 L9 19')}
   </div>
 </div>`;
 }
 function proofItemHTML(p){
-  const w=L().isWide;
-  return `<div style="flex-shrink:0;width:${w?'30px':'26px'};height:${w?'30px':'26px'};color:#232323;display:flex;align-items:center;justify-content:center">${p.icon}</div>
-  <div style="display:flex;${w?'flex-direction:row;align-items:baseline;gap:10px':'flex-direction:column;gap:1px'};min-width:0;text-align:${w?'left':'center'}">
-    <span style="font-weight:700;font-size:${w?'19px':'15px'};line-height:${w?'26px':'20px'};color:#232323">${p.title}</span>
-    <span style="font-weight:400;font-size:${w?'15px':'12.5px'};line-height:${w?'26px':'17px'};color:#737373">${p.sub}</span>
-  </div>`;
+  return `<p style="margin:0;font-size:14px;line-height:24px;color:#232323;text-align:center;word-break:break-word"><span style="font-weight:500">${p.title} ⋅ </span><span style="font-weight:400">${p.sub}</span></p>`;
 }
 function renderProof(){const el=document.getElementById('proof-content');if(el)el.innerHTML=proofItemHTML(PROOF_POINTS[_proofIdx]);}
 function setProof(i){
@@ -1107,6 +1102,10 @@ function onRailDown(e){
 
 /* ── Layout on resize ───────────────────────────────────────── */
 let _resizeTimer,_lastW=window.innerWidth;
+// Markup baked by buildShell only changes when one of these flips; between
+// flips the hero/header are CSS-fluid and only the carousel needs re-measuring.
+function layoutSig(){return`${S.vw<768}|${S.vw<1200}|${S.vw<1400}`;}
+let _lastSig=layoutSig();
 function onResize(){
   const w=window.innerWidth;
   // Ignore height-only changes (Safari toolbar show/hide on scroll fires
@@ -1116,8 +1115,18 @@ function onResize(){
   S.vw=w;
   clearTimeout(_resizeTimer);
   _resizeTimer=setTimeout(()=>{
-    buildShell();cacheRefs();bindShellEvents();
-    updateCarousel();updateAddonFilters();
+    const sig=layoutSig();
+    if(sig!==_lastSig){
+      // Crossed a breakpoint: full rebuild, then restore dynamic UI state
+      // (search phase, counts, rotator) that the fresh markup doesn't carry.
+      _lastSig=sig;
+      buildShell();cacheRefs();bindShellEvents();
+      updateCarousel();updateAddonFilters();updateSearch();
+    }else{
+      // Same breakpoint: just re-measure the carousel (card widths track vw
+      // on tablet); leave the rest of the DOM alone so nothing snaps.
+      updateCarousel();
+    }
     requestAnimationFrame(()=>positionThumb(false));
     setTimeout(()=>positionThumb(false),250);
   },60);
