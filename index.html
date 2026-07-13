@@ -20,6 +20,9 @@ a{color:#232323}
 button{font-family:inherit}
 .cp-link{text-decoration:underline dotted;text-decoration-color:#C4C4C4;text-decoration-thickness:1.4px;text-underline-offset:3px;cursor:pointer;transition:color .15s ease,text-decoration-color .15s ease}
 .cp-link:hover{color:#1A73E8 !important;text-decoration-color:#1A73E8}
+#hdr-full{display:none}#hdr-compact{display:flex}
+@media(min-width:992px){#hdr-compact{display:none!important}#hdr-full{display:flex!important}}
+.hdr-nav a:hover{color:#FF6024!important}
 @media (hover:hover){.proof-nav{opacity:0;transition:opacity .2s ease}.proof-sec:hover .proof-nav,.proof-sec:focus-within .proof-nav{opacity:1}}
 @keyframes cpFade{from{opacity:0}to{opacity:1}}
 @keyframes cpFadeOut{from{opacity:1}to{opacity:0}}
@@ -489,24 +492,46 @@ function buildShell(){
   const html=`<div style="min-height:100vh;display:flex;justify-content:center;background:${lo.isWide?'#fff':'#dfe1e3'};padding:0">
 <div style="width:100%;max-width:${lo.isMobile?'100%':'none'};background:#fff;min-height:100vh;position:relative;overflow:hidden">
 
-<!-- Header mobile -->
-<div id="hdr-m" style="display:${lo.isWide?'none':'flex'};height:60px;border-bottom:1px solid rgba(0,0,0,.1);align-items:center;justify-content:space-between;padding:10px 16px;position:sticky;top:0;background:#fff;z-index:20">
-  <div style="display:flex;align-items:center;gap:16px">
+<!-- Header: compact (<992px) -->
+<div id="hdr-compact" style="height:60px;border-bottom:1px solid rgba(0,0,0,.1);align-items:center;justify-content:space-between;padding:10px 16px;position:sticky;top:0;background:#fff;z-index:20">
+  <div style="display:flex;align-items:center;gap:14px">
     <div style="width:24px;height:24px;color:#232323;display:flex;align-items:center;justify-content:center;cursor:pointer"><cp-icon name="MenuLine" size="24"></cp-icon></div>
     <img src="project/assets/origin-logo-landscape.svg" alt="Origin" style="height:30px;width:auto;display:block">
-    <span style="width:5px;height:5px;border-radius:50%;background:#FF6024;display:inline-block"></span>
   </div>
   <button style="border:0;background:#FFB233;border-radius:20px;height:40px;padding:0 20px;font-weight:600;font-size:14.5px;color:#232323;cursor:pointer">Log in</button>
 </div>
 
-<!-- Header wide -->
-<div id="hdr-w" style="display:${lo.isWide?'flex':'none'};height:76px;border-bottom:1px solid rgba(0,0,0,.1);align-items:center;justify-content:center;padding:0 40px;position:sticky;top:0;background:#fff;z-index:20">
-  <div style="width:100%;max-width:${lo.trackMax};display:flex;align-items:center;justify-content:space-between">
-    <div style="display:flex;align-items:center;gap:6px">
-      <img src="project/assets/origin-logo-landscape.svg" alt="Origin" style="height:34px;width:auto;display:block">
-      <span style="width:6px;height:6px;border-radius:50%;background:#FF6024;display:inline-block"></span>
+<!-- Header: full two-row (>=992px) -->
+<div id="hdr-full" style="flex-direction:column;position:sticky;top:0;background:#fff;z-index:20;border-bottom:1px solid rgba(0,0,0,.1)">
+  <div style="height:60px;background:#F6F5F3;display:flex;align-items:center;padding:0 40px">
+    <div style="width:100%;max-width:${lo.trackMax};margin:0 auto;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:36px">
+        <img src="project/assets/origin-logo-landscape.svg" alt="Origin" style="height:30px;width:auto;display:block">
+        <nav class="hdr-nav" style="display:flex;align-items:center;gap:28px">
+          <a href="#" style="font-weight:700;font-size:15px;color:#232323;text-decoration:none;padding:6px 0;border-bottom:2px solid #FF6024">At Home</a>
+          <a href="#" style="font-weight:500;font-size:15px;color:#232323;text-decoration:none;transition:color .2s">Business</a>
+          <a href="#" style="font-weight:500;font-size:15px;color:#232323;text-decoration:none;transition:color .2s">Enterprise</a>
+        </nav>
+      </div>
+      <nav class="hdr-nav" style="display:flex;align-items:center;gap:26px">
+        <a href="#" style="font-weight:500;font-size:15px;color:#232323;text-decoration:none;transition:color .2s">About</a>
+        <a href="#" style="font-weight:500;font-size:15px;color:#232323;text-decoration:none;transition:color .2s">Blog</a>
+        <a href="#" style="display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:15px;color:#505050;text-decoration:none;transition:color .2s"><cp-icon name="SearchSolid" size="18"></cp-icon>Help</a>
+      </nav>
     </div>
-    <button style="border:0;background:#FFB233;border-radius:24px;height:44px;padding:0 28px;font-weight:600;font-size:15px;color:#232323;cursor:pointer;white-space:nowrap;flex-shrink:0">Log in</button>
+  </div>
+  <div style="height:60px;background:#fff;display:flex;align-items:center;padding:0 40px">
+    <div style="width:100%;max-width:${lo.trackMax};margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <nav class="hdr-nav" style="display:flex;align-items:center;gap:30px;flex-wrap:wrap">
+        <a href="#" style="font-weight:500;font-size:15px;color:#232323;text-decoration:none;white-space:nowrap;transition:color .2s">Energy</a>
+        <a href="#" style="font-weight:500;font-size:15px;color:#232323;text-decoration:none;white-space:nowrap;transition:color .2s">Internet</a>
+        <a href="#" style="font-weight:500;font-size:15px;color:#232323;text-decoration:none;white-space:nowrap;transition:color .2s">Solar &amp; Batteries</a>
+        <a href="#" style="font-weight:500;font-size:15px;color:#232323;text-decoration:none;white-space:nowrap;transition:color .2s">LPG bottles</a>
+        <a href="#" style="font-weight:500;font-size:15px;color:#232323;text-decoration:none;white-space:nowrap;transition:color .2s">Electric vehicles</a>
+        <a href="#" style="font-weight:500;font-size:15px;color:#232323;text-decoration:none;white-space:nowrap;transition:color .2s">Moving</a>
+      </nav>
+      <button style="border:0;background:#FFB233;border-radius:24px;height:44px;padding:0 28px;font-weight:600;font-size:15px;color:#232323;cursor:pointer;white-space:nowrap;flex-shrink:0">Log in</button>
+    </div>
   </div>
 </div>
 
